@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 public class ParkingPermitKiosk
 {
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		System.out.println("Hello World!");
 
@@ -16,6 +16,8 @@ public class ParkingPermitKiosk
 
 		frame.setVisible(true);
 	} // end method main
+	
+	*/
 
 } // end class ParkingPermitKiosk
 
