@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,8 +20,10 @@ public class ParkingPermitKioskModel
 	public static HashMap<String,HashMap> studentMap = new HashMap<String,HashMap>();
 	private static Pattern pattern;
 	private static Matcher matcher;
-	 
-	public static HashMap<String,HashMap> readDatabase()
+	public static List<String> companyDatabase = new ArrayList<String>();
+	
+	
+	public static HashMap<String,HashMap> readStudentDatabase()
 	{
 		File file = new File("students.txt");
 		FileInputStream fis = null;
@@ -127,18 +131,59 @@ public class ParkingPermitKioskModel
 		}
 	}
 	
+	public static List<String> readCompanyDatabase()
+	{
+		
+		File file = new File("companies.txt");
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		DataInputStream dis = null;
+		
+		try
+		{
+			fis = new FileInputStream(file);
+			bis = new BufferedInputStream(fis);
+			dis = new DataInputStream(bis);
+			
+			String str;
+			while(dis.available() != 0)
+			{
+				str = dis.readLine();
+				
+				companyDatabase.add(str);
+			}
+		}catch(IOException e)
+		{
+			System.out.println("File Error");
+		}
+		
+		
+		/*for(int i =0 ;i<companyDatabase.size();i++)
+		{
+			System.out.println("list # "+i+" company: "+companyDatabase.get(i));
+		}*/
+		
+		return companyDatabase;
+		
+	}
+	
+	
 	
 	
 	
 	
 	public static void main(String[] args)
 	{
-		readDatabase();
+		/*
+		readStudentDatabase();
 		studenNumberInDatabase("123456789");
 		System.out.println(studentMap.containsKey("123456789"));
 		studentNumberAndPINMatches("123456789","1234");
 		emailValid("mili_24_729@hotmail.com");
 		hasOutstandingFine("456864324");
+		
+		readCompanyDatabase();
+		*/
 	}
 	
 }
