@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 public class ParkingPermitKiosk
 {
-	/*public static void main(String[] args)
+	public static void main(String[] args)
 	{
 		System.out.println("Hello World!");
 
@@ -15,9 +15,10 @@ public class ParkingPermitKiosk
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setVisible(true);
+
 	} // end method main
 	
-	*/
+	
 
 } // end class ParkingPermitKiosk
 
@@ -69,9 +70,24 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 
 		// setup the main panel to be the main pane in frame
 		setContentPane(mainPane);
-	}
+	} // end constructor
 
 	public void actionPerformed(ActionEvent e)
 	{
-	}
-}
+	} // end method actionPerformed
+	
+	public void printParkingTicket(String expiryDate, String moneyPaid, String studentNumber, String plateNumber)
+	{
+		// ticket content
+		String displayMsg = "";
+		displayMsg += "Money Paid : " + moneyPaid + "\n";
+		displayMsg += "Expiry Date : " + expiryDate + "\n";
+		displayMsg += "Student Number : " + studentNumber + "\n";
+		displayMsg += "Plate Number : " + plateNumber + "\n";
+
+		// ticket title
+		String ticketTitle = "Parking Ticket";
+	
+		JOptionPane.showMessageDialog(null, displayMsg, ticketTitle, JOptionPane.PLAIN_MESSAGE);
+	} // end method printParkingTicket
+} // end class 
