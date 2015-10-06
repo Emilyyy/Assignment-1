@@ -44,12 +44,10 @@ public class ParkingPermitKioskModel
 				
 				String[] line = str.split(",");
 				informationMap.put("PIN", line[1].trim());
-				informationMap.put("FmailyName",line[2].trim());
+				informationMap.put("FamilyName",line[2].trim());
 				informationMap.put("GivenName", line[3].trim());
 				informationMap.put("status", line[4].trim());
 				studentMap.put(line[0].trim(), informationMap);
-				
-				
 			}
 		}catch(IOException e)
 		{
@@ -166,9 +164,6 @@ public class ParkingPermitKioskModel
 		return companyDatabase;
 		
 	}
-	
-	
-	
 	
 	
 	
