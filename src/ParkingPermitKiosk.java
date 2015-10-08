@@ -4,6 +4,7 @@ import javax.swing.Box.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class ParkingPermitKiosk
@@ -42,6 +43,22 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	Map<JButton, String> letterButtonMap;
 	Map<JButton, String> numButtonMap;
 	
+	JLabel studentNumberLabel;
+	JTextField studentNumberInput;
+	JLabel PINLabel;
+	JTextField PINInput;
+	JLabel EmailLabel;
+	JTextField EmailInput;
+	JLabel vehicleMakeLabel;
+	//JTextField vehicleMakeInput;
+	JLabel vehicleModelLabel;
+	//JTextField vehicleColorInput;
+	JLabel plateNumberLabel;
+	JTextField plateNumberInput;
+	
+	Map<String,ArrayList<String>> vehicleMap;
+	
+
 	final int frameRow;
 	final int frameCol;
 
@@ -49,6 +66,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	public ParkingPermitKioskFrame()
 	{
 		
+
 		// define frame row
 		frameRow = 3;
 
@@ -61,8 +79,12 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		// construct inputPanel
 		inputPanel = new JPanel();
 		inputPanel.setBackground(Color.pink);
+		
+		//inputPanel.setLayout(new GridLayout(1,2));
 		JLabel label1 = new JLabel("inputPanel for all the fields and label");
-		inputPanel.add(label1);
+		inputPanel.add(studentNumberPanel());
+		//inputPanel.add(label1);
+		
 
 		// construct buttonPanel
 		buttonPanel = new JPanel();
@@ -87,6 +109,77 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		// test!!!
 		
 	} // end constructor
+	
+	public JPanel studentNumberPanel()
+	{
+		studentNumberLabel=new JLabel("Student Number: ");
+		studentNumberInput = new JTextField(9);
+		PINLabel = new JLabel("PIN: ");
+		PINInput = new JTextField(4);
+		
+		//add listeners
+		studentNumberInput.addActionListener(this);
+		PINInput.addActionListener(this);
+		
+		//add components to panel
+		JPanel studentNumber = new JPanel();
+		studentNumber.add(studentNumberLabel);
+		studentNumber.add(studentNumberInput);
+
+		JPanel PIN = new JPanel();
+		PIN.add(PINLabel);
+		PIN.add(PINInput);
+		
+		JPanel studentInfoPanel = new JPanel();
+		
+		studentInfoPanel.setLayout(new GridLayout(2,1));
+		studentInfoPanel.add(studentNumber);
+		studentInfoPanel.add(PIN);
+		
+		this.setContentPane(studentInfoPanel);
+		
+		return studentInfoPanel;
+		
+	}
+	
+	public JPanel emailPanel()
+	{
+		EmailLabel = new JLabel("Email(Optional): ");
+		EmailInput = new JTextField(20);
+		
+		JPanel emailInfo = new JPanel();
+		emailInfo.setLayout(new GridLayout(2,1));
+		emailInfo.add(EmailLabel);
+		emailInfo.add(EmailInput);		
+		
+		JPanel emailInfoPanel = new JPanel();
+		emailInfoPanel.add(emailInfo);
+		
+		return emailInfoPanel;
+	}
+	
+	/*public Map<String,ArrayList<String>> importVehicleInfo()
+	{
+		
+		
+		return vehicleMap;
+	}*/
+	
+	/*public JPanel VehiclePanel()
+	{
+		vehicleMakeLabel = new JLabel("Vehicle Make: ");
+		
+		JPanel vehicleMakePanel = new JPanel();
+		
+		
+	}*/
+	
+	/*public JPanel insurancePanel()
+	{
+		
+		
+		
+	}*/
 
 	public void actionPerformed(ActionEvent e)
 	{
