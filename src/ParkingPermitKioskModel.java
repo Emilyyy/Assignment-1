@@ -94,6 +94,7 @@ public class ParkingPermitKioskModel
 		}
 	}
 	
+	
 	public static boolean emailValid(String emailInput)
 	{
 		pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -149,6 +150,7 @@ public class ParkingPermitKioskModel
 				str = dis.readLine();
 				
 				companyDatabase.add(str);
+				
 			}
 		}catch(IOException e)
 		{

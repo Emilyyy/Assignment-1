@@ -12,7 +12,8 @@ public class ParkingPermitKiosk
 	public static void main(String[] args)
 	{
 		System.out.println("Hello World!");
-
+		ParkingPermitKioskModel.readStudentDatabase();
+		ParkingPermitKioskModel.readCompanyDatabase();
 		ParkingPermitKioskFrame frame = new ParkingPermitKioskFrame();
 //		frame.setPreferredSize(new Dimension(600, 300));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,6 +56,10 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	//JTextField vehicleColorInput;
 	JLabel plateNumberLabel;
 	JTextField plateNumberInput;
+	JLabel insuranceNumberLabel;
+	JTextField insuranceNumberInput;
+	
+	JList insuranceCompanyList;
 	
 	Map<String,ArrayList<String>> vehicleMap;
 	
@@ -82,7 +87,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		
 		//inputPanel.setLayout(new GridLayout(1,2));
 		JLabel label1 = new JLabel("inputPanel for all the fields and label");
-		inputPanel.add(studentNumberPanel());
+		inputPanel.add(insurancePanel());
 		//inputPanel.add(label1);
 		
 
@@ -174,12 +179,41 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		
 	}*/
 	
-	/*public JPanel insurancePanel()
+	public JPanel insurancePanel()
 	{
+		JPanel insuranceInfoPanel = new JPanel();
+		JPanel policyNumberPanel = new JPanel();
+		insuranceNumberLabel = new JLabel("Policy Number: ");
+		insuranceNumberInput = new JTextField(10);
+		
+		policyNumberPanel.add(insuranceNumberLabel);
+		policyNumberPanel.add(insuranceNumberInput);
+		
+		JPanel listPanel = new JPanel();
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		for(int i=0;i<ParkingPermitKioskModel.companyDatabase.size();i++)
+		{
+			listModel.addElement(ParkingPermitKioskModel.companyDatabase.get(i));
+		}
+		
+		insuranceCompanyList = new JList<>(listModel);
+		
+		add(new JScrollPane(insuranceCompanyList));
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(200,200);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+		
+		listPanel.add(insuranceCompanyList);
+		
+		insuranceInfoPanel.setLayout(new GridLayout(2,1));
+		insuranceInfoPanel.add(policyNumberPanel);
+		insuranceInfoPanel.add(listPanel);
 		
 		
-		
-	}*/
+		return insuranceInfoPanel;
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
