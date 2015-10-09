@@ -1,10 +1,9 @@
 import javax.swing.*;
-import javax.swing.Box.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 public class ParkingPermitKiosk
@@ -32,17 +31,18 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	// fields
 	JPanel mainPane; // main panel that consist everything
 	JPanel inputPanel;
-	JPanel buttonPanel;
-	JPanel keyboardPanel;
+	JPanel buttonPanel; //
+	JPanel keyboardPanel; // virutal keyboard panel
+	
+	// progress action buttons
+	JButton submitButton, backButton, nextButton, clearButton;
 	
 	// keyboard panels
 	JPanel letterKeyboard;
 	JPanel numKeyboardPanel;
 	
-	// map to find char from button
-	Map<JButton, String> allButtonMap;
-	Map<JButton, String> letterButtonMap;
-	Map<JButton, String> numButtonMap;
+	// map to find char from virtual keyboards
+	Map<JButton, String> allKeyboardButtonMap;
 	
 	JLabel studentNumberLabel;
 	JTextField studentNumberInput;
@@ -63,6 +63,11 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	
 	Map<String,ArrayList<String>> vehicleMap;
 	
+	// expiry date panel
+	JPanel expirydayPanel;
+	
+	// expiry date combo box
+	JComboBox<Integer> month, day;
 
 	final int frameRow;
 	final int frameCol;
@@ -84,18 +89,13 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		// construct inputPanel
 		inputPanel = new JPanel();
 		inputPanel.setBackground(Color.pink);
+		mainPane.add(inputPanel);
 		
 		//inputPanel.setLayout(new GridLayout(1,2));
-		JLabel label1 = new JLabel("inputPanel for all the fields and label");
-		inputPanel.add(insurancePanel());
-		//inputPanel.add(label1);
-		
+		inputPanel.add(insurancePanel());		
 
 		// construct buttonPanel
-		buttonPanel = new JPanel();
-		buttonPanel.setBackground(Color.yellow);
-		JLabel label2 = new JLabel("buttonPanel for submit button");
-		buttonPanel.add(label2);
+		setupSubmittPanel();
 
 		// construct keyboardPanel
 		keyboardPanel = new JPanel();
@@ -103,17 +103,71 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		setupAllKeyboards();
 
 		// add subpanel into the main panel
-		mainPane.add(inputPanel);
-		mainPane.add(buttonPanel);
 		mainPane.add(keyboardPanel);
 
 		// setup the main panel to be the main pane in frame
 		setContentPane(mainPane);
 		
-		// setup Letter Keyboard
 		// test!!!
-		
+		expiryDatePanel();
 	} // end constructor
+	
+	private void setupSubmittPanel()
+	{
+		// define propoerties of button panel
+		final int ROW = 1;
+		final int COL = 4;
+		
+		backButton = new JButton("Back");
+		nextButton = new JButton("Next");
+		submitButton = new JButton("Submit");
+		clearButton = new JButton("Clear");
+		
+		// setup button panel
+		buttonPanel = new JPanel(new GridLayout(ROW, COL));
+		mainPane.add(buttonPanel);
+		
+		// add buttons to panel
+		buttonPanel.add(backButton);
+		buttonPanel.add(nextButton);
+		buttonPanel.add(submitButton);
+		buttonPanel.add(clearButton);
+		
+		// set button action
+		backButton.addActionListener(this);
+		nextButton.addActionListener(this);
+		clearButton.addActionListener(this);
+		submitButton.addActionListener(this);
+		
+	} // end method setupSubmittPanel
+	
+	private void expiryDatePanel()
+	{
+		// define panel properties
+		final int ROW = 1;
+		final int COL = 2;
+
+		// setup Panel
+		expirydayPanel = new JPanel(new GridLayout(ROW, COL));
+		
+		// possible month
+		Integer[] monthRange = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		
+		// setup reuqired compoments
+		month =new JComboBox<>(monthRange);
+		day = new JComboBox<>();
+		month.addActionListener(this);
+		day.addActionListener(this);
+
+		// add combo boxes to panel
+		expirydayPanel.add(month);
+		expirydayPanel.add(day);
+		
+		//test!!!
+		mainPane.remove(keyboardPanel);
+		mainPane.add(expirydayPanel);
+		
+	} // end method expiryDatePanel
 	
 	public JPanel studentNumberPanel()
 	{
@@ -219,15 +273,62 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 	{
 		Object obj = e.getSource();
 		
-		String ch = allButtonMap.get(obj);
+		String ch = allKeyboardButtonMap.get(obj);
 		
-		JOptionPane.showMessageDialog(null, ch, "", JOptionPane.PLAIN_MESSAGE);
+		// case 1: button clicked is a virtual keyboard key
+		if (ch != null)
+		{
+			JOptionPane.showMessageDialog(null, ch, "", JOptionPane.PLAIN_MESSAGE);
+		}
+		// case : exipiry month selected
+		else if (obj == month)
+		{
+//			JOptionPane.showMessageDialog(null, month.getSelectedItem().toString(), "", JOptionPane.PLAIN_MESSAGE);
+			int monthInt = Integer.parseInt(month.getSelectedItem().toString());
+			setDateForMonth(monthInt);
+		}
+			
+//		
+//		System.out.println("Clicked!");
+		
 	} // end method actionPerformed
+	
+	private void setDateForMonth(int month)
+	{
+		ArrayList<Integer> dayList = new ArrayList<>();
+		
+		switch(month)
+		{
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				for (int i = 1; i <= 31; i++)	dayList.add(i);
+				break;
+			case 2:
+				for (int i = 1; i <= 28; i++)	dayList.add(i);
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				for (int i = 1; i <= 30; i++)	dayList.add(i);
+				break;
+		}
+		
+		// add days into combobox
+		day.removeAllItems();
+		for (int i = 0; i < dayList.size(); i++)	day.addItem(dayList.get(i));
+		
+	} // end method setDateForMonth
 	
 	private void setupAllKeyboards()
 	{
 		// create map for button matching
-		allButtonMap = new HashMap<JButton, String>();
+		allKeyboardButtonMap = new HashMap<JButton, String>();
 		
 		// setup sub keyboards
 		setupLetterKeyboard();
@@ -236,9 +337,6 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 //		keyboardPanel.add(letterKeyboard);
 		keyboardPanel.add(numKeyboardPanel);
 
-		// test!!!
-//		allButtonMap.putAll(letterButtonMap);
-//		allButtonMap.putAll(numButtonMap);
 		
 	} // end method setupAllKeyboards
 	
@@ -275,7 +373,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		{
 			JButton button = new JButton(firstRow[i]);
 			letterKeyboardPanel1.add(button);
-			allButtonMap.put(button, firstRow[i]);
+			allKeyboardButtonMap.put(button, firstRow[i]);
 			button.addActionListener(this);
 		} // end for add first row
 		
@@ -284,7 +382,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		{
 			JButton b = new JButton(secondRow[i]);
 			letterKeyboardPanel2.add(b);
-			allButtonMap.put(b, secondRow[i]);
+			allKeyboardButtonMap.put(b, secondRow[i]);
 			b.addActionListener(this);
 		} // end for add second row
 		
@@ -293,7 +391,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		{
 			JButton b = new JButton(thirdRow[i]);
 			letterKeyboardPanel3.add(b);
-			allButtonMap.put(b, thirdRow[i]);
+			allKeyboardButtonMap.put(b, thirdRow[i]);
 			b.addActionListener(this);
 		} // end for add third row
 		
@@ -302,7 +400,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		{
 			JButton b = new JButton(fourthRow[i]);
 			letterKeyboardPanel4.add(b);
-			allButtonMap.put(b, fourthRow[i]);
+			allKeyboardButtonMap.put(b, fourthRow[i]);
 			b.addActionListener(this);
 		} // end for add 4th row
 		
@@ -311,7 +409,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 		{
 			JButton b = new JButton(fifthRow[i]);
 			letterKeyboardPanel5.add(b);
-			allButtonMap.put(b, fifthRow[i]);
+			allKeyboardButtonMap.put(b, fifthRow[i]);
 			b.addActionListener(this);
 		} // end for add 4th row
 		
@@ -345,7 +443,7 @@ class ParkingPermitKioskFrame extends JFrame implements ActionListener
 			b.addActionListener(this);
 			
 			
-			allButtonMap.put(b, num[i]);
+			allKeyboardButtonMap.put(b, num[i]);
 		} // end for add keys into keyboard
 		
 	} // end method setupNumKeyboard
